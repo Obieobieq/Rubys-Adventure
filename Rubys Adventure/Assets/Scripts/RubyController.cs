@@ -1,9 +1,12 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class RubyController : MonoBehaviour
 {
+
     public float speed = 3.0f;
 
     public int maxHealth = 5;
@@ -31,6 +34,17 @@ public class RubyController : MonoBehaviour
 
     public ParticleSystem damageEffect;
 
+    public int score = 0;
+    public GameObject scoreText;
+
+    public GameObject gameOverText;
+    
+    bool gameOver;
+
+    TextMeshProUGUI scoreText_text;
+    TextMeshProUGUI gameOverText_text;
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +54,10 @@ public class RubyController : MonoBehaviour
         currentHealth = maxHealth;
 
         audioSource = GetComponent<AudioSource>();
+
+        scoreText_text = scoreText.GetComponent<TextMeshProUGUI>();
+        gameOverText_text = gameOverText.GetComponent<TextMeshProUGUI>();
+        gameOver = false;
     }
 
     // Update is called once per frame
@@ -84,6 +102,33 @@ public class RubyController : MonoBehaviour
                 }
             }
         }
+
+        scoreText_text.text = "Fixed Robots: " + score.ToString() + "/2";
+
+        if (currentHealth < 1)
+        {
+            gameOver = true;
+            gameOverText.SetActive(true);
+            gameOverText_text.text = "You lost! Press R to Restart!";
+            speed = 0.0000000001f;
+        }
+
+        if (score == 2)
+        {
+            gameOver = true;
+            gameOverText.SetActive(true);
+            gameOverText_text.text = "You won! Game made by Group 30. Press R to Restart!";
+        }
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            if (gameOver == true)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+
+        
     }
 
     void FixedUpdate()
@@ -137,4 +182,12 @@ public class RubyController : MonoBehaviour
     {
         damageEffect.Stop();
     }
+
+    public void ChangeScore(int scoreAmount)
+    {  
+        score = (score + scoreAmount);
+    }   
+
+
+
 }

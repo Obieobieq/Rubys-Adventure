@@ -29,6 +29,5 @@ public class HealthCollectible : MonoBehaviour
                 Instantiate(collectibleEffect, transform.position, transform.rotation);
             }
         }
-
     }
 }

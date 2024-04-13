@@ -1,6 +1,10 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+using TMPro;
 
 public class EnemyController : MonoBehaviour
 {
@@ -16,18 +20,39 @@ public class EnemyController : MonoBehaviour
     bool broken = true;
     
     Animator animator;
-    
+
+    private RubyController rubyController; // this line of code creates a variable called "rubyController" to store information about the RubyController script!
+
     // Start is called before the first frame update
+
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         timer = changeTime;
         animator = GetComponent<Animator>();
+        GameObject rubyControllerObject = GameObject.FindWithTag("RubyController"); //this line of code finds the RubyController script by looking for a "RubyController" tag on Ruby
+
+        if (rubyControllerObject != null)
+
+        {
+
+            rubyController = rubyControllerObject.GetComponent<RubyController>(); //and this line of code finds the rubyController and then stores it in a variable
+
+            print ("Found the RubyConroller Script!");
+
+        }
+
+        if (rubyController == null)
+
+        {
+
+            print ("Cannot find GameController Script!");
+        }
     }
 
     void Update()
     {
-        //remember ! inverse the test, so if broken is true !broken will be false and return won’t be executed.
+        //remember ! inverse the test, so if broken is true !broken will be false and return wonâ€™t be executed.
         if(!broken)
         {
             return;
@@ -44,7 +69,7 @@ public class EnemyController : MonoBehaviour
     
     void FixedUpdate()
     {
-        //remember ! inverse the test, so if broken is true !broken will be false and return won’t be executed.
+        //remember ! inverse the test, so if broken is true !broken will be false and return wonâ€™t be executed.
         if(!broken)
         {
             return;
@@ -87,5 +112,9 @@ public class EnemyController : MonoBehaviour
         animator.SetTrigger("Fixed");
         
         smokeEffect.Stop();
+        if (rubyController != null)
+        {
+            rubyController.ChangeScore(1); //this line of code is increasing Ruby's score by 1!
+        }
     }
 }
