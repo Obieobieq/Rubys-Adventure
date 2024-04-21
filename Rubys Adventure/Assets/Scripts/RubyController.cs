@@ -43,7 +43,12 @@ public class RubyController : MonoBehaviour
 
     TextMeshProUGUI scoreText_text;
     TextMeshProUGUI gameOverText_text;
-    
+
+    // Quinones added the next 3 references
+    bool isSlow;
+    float slowTimer;    
+    public float timeSlow = 2.0f;
+    public OilSlick oS;
 
     // Start is called before the first frame update
     void Start()
@@ -83,6 +88,22 @@ public class RubyController : MonoBehaviour
             invincibleTimer -= Time.deltaTime;
             if (invincibleTimer < 0)
                 isInvincible = false;
+        }
+
+        // Quinones added these 2 if statements
+        if (isSlow)
+        {
+            slowTimer -= Time.deltaTime;
+            if (slowTimer < 0)
+            {
+                isSlow = false;
+                oS.played = false;
+            }
+        }
+
+        if (isSlow == false)
+        {
+            speed = 3;
         }
 
         if (Input.GetKeyDown(KeyCode.C))
@@ -127,8 +148,6 @@ public class RubyController : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
-
-        
     }
 
     void FixedUpdate()
@@ -188,6 +207,33 @@ public class RubyController : MonoBehaviour
         score = (score + scoreAmount);
     }   
 
+    // Quinones added these two blocks of code
+    public void ChangeSpeed(int speed2)
+    {
+        speed = speed2;
 
+        if (speed == 1)
+        {
+            if (isSlow)
+                return;
 
+            isSlow = true;
+            slowTimer = timeSlow;
+        }
+    }
+
+    void slowAhh()
+    {
+        if (speed == 1)
+        {
+            isSlow = true;
+        }
+    }
+
+    // Leana added this code
+    public void PowerUp(int invincibleTime)
+    {
+        invincibleTimer = invincibleTime;
+        isInvincible = true;
+    }
 }
